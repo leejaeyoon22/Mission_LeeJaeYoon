@@ -8,7 +8,7 @@ public class App {
         String commend = "";
         String saying = "";
         String author = "";
-        int order = 1;
+        int order = 0;
 
         System.out.println("== 명언 앱 ==");
 
@@ -20,6 +20,8 @@ public class App {
                 saying = sc.nextLine();
                 System.out.print("작가 : ");
                 author = sc.nextLine();
+                order++;
+
                 System.out.printf("%d번 명언이 등록되었습니다.\n", order);
             }
         }
