@@ -40,18 +40,23 @@ public class App {
                 }
             } else if (commend.startsWith("삭제?")) {
                 String[] delete = commend.split("=", 2);
-                int deleteIndex = Integer.parseInt(delete[1]) - 1;
+                int deleteIndex = Integer.parseInt(delete[1]);
+                boolean deleted = false;
 
                 Iterator<SayingList> iterator = sayingRepository.iterator();
 
                 while (iterator.hasNext()) {
                     SayingList sayingList = iterator.next();
 
-                    if (sayingList.order == deleteIndex + 1) {
+                    if (sayingList.order == deleteIndex) {
                         iterator.remove();
-                        System.out.printf("%s번 명언이 삭제되었습니다.\n", delete[1]);
+                        deleted = true;
+                        System.out.printf("%s번 명언이 삭제되었습니다.\n", deleteIndex);
                         break;
                     }
+                }
+                if (!deleted) {
+                    System.out.printf("%s번 명언은 존재하지 않습니다.\n", deleteIndex);
                 }
             }
         }
