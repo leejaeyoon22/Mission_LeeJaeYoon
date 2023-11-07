@@ -1,14 +1,16 @@
 package com.ll;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class App {
     public static void run() {
         Scanner sc = new Scanner(System.in);
         String commend = "";
-        String saying = "";
-        String author = "";
+        String saying;
+        String author;
         int order = 0;
         ArrayList<SayingList> sayingRepository = new ArrayList<>();
 
@@ -17,6 +19,7 @@ public class App {
         while(!(commend.equals("종료"))) {
             System.out.print("명령) ");
             commend = sc.nextLine();
+
             if(commend.equals("등록")) {
                 System.out.print("명언 : ");
                 saying = sc.nextLine();
@@ -34,6 +37,21 @@ public class App {
                 for(int i=sayingRepository.size()-1; i>=0; i--) {
                     SayingList sayingList = sayingRepository.get(i);
                     System.out.printf("%d / %s / %s\n", sayingList.order, sayingList.author, sayingList.saying);
+                }
+            } else if (commend.startsWith("삭제?")) {
+                String[] delete = commend.split("=", 2);
+                int deleteIndex = Integer.parseInt(delete[1]) - 1;
+
+                Iterator<SayingList> iterator = sayingRepository.iterator();
+
+                while (iterator.hasNext()) {
+                    SayingList sayingList = iterator.next();
+
+                    if (sayingList.order == deleteIndex + 1) {
+                        iterator.remove();
+                        System.out.printf("%s번 명언이 삭제되었습니다.\n", delete[1]);
+                        break;
+                    }
                 }
             }
         }
