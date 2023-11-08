@@ -1,5 +1,6 @@
 package com.ll;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -17,7 +18,8 @@ public class App {
         sayingRepository = new ArrayList<>();
         commend = "";
     }
-    void run() {
+    public void run() {
+        loadDataFromFile();
         System.out.println("== 명언 앱 ==");
 
         while(!(commend.equals("종료"))) {
@@ -30,12 +32,14 @@ public class App {
                 readList();
             } else if (commend.startsWith("삭제?")) {
                 deleteList();
+                saveDataToFile();
             } else if (commend.startsWith("수정?")) {
                 modifyList();
+                saveDataToFile();
             }
         }
     }
-    void upload() {
+    private void upload() {
         System.out.print("명언 : ");
         saying = sc.nextLine();
         System.out.print("작가 : ");
@@ -46,8 +50,9 @@ public class App {
         sayingRepository.add(sayingList);
 
         System.out.printf("%d번 명언이 등록되었습니다.\n", order);
+        saveDataToFile();
     }
-    void readList() {
+    private void readList() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
         for(int i=sayingRepository.size()-1; i>=0; i--) {
@@ -55,7 +60,7 @@ public class App {
             System.out.printf("%d / %s / %s\n", sayingList.order, sayingList.author, sayingList.saying);
         }
     }
-    void deleteList() {
+    private void deleteList() {
         int deleteIndex = findByIndex();
         boolean deleted = false;
 
@@ -75,7 +80,7 @@ public class App {
             System.out.printf("%s번 명언은 존재하지 않습니다.\n", deleteIndex);
         }
     }
-    void modifyList() {
+    private void modifyList() {
         int modifyIndex = findByIndex() -1;
         boolean check = false;
 
@@ -105,9 +110,31 @@ public class App {
             System.out.printf("%d번 명언은 존재하지 않습니다.\n", modifyIndex+1);
         }
     }
-    int findByIndex() {
+    private int findByIndex() {
         String[] idx = commend.split("=", 2);
         return Integer.parseInt(idx[1]);
+    }
+    private void saveDataToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("sayingData.txt"))) {
+            for (SayingList sayingList : sayingRepository) {
+                writer.write(sayingList.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void loadDataFromFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("sayingData.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // 데이터 파싱 및 목록에 추가하는 로직을 구현해야 합니다.
+                SayingList sayingList = SayingList.fromString(line);
+                sayingRepository.add(sayingList);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
