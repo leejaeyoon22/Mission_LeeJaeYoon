@@ -15,6 +15,7 @@ public class App {
         sc = new Scanner(System.in);
         order = 0;
         sayingRepository = new ArrayList<>();
+        commend = "";
     }
     void run() {
         System.out.println("== 명언 앱 ==");
@@ -55,8 +56,7 @@ public class App {
         }
     }
     void deleteList() {
-        String[] delete = commend.split("=", 2);
-        int deleteIndex = Integer.parseInt(delete[1]);
+        int deleteIndex = findByIndex();
         boolean deleted = false;
 
         Iterator<SayingList> iterator = sayingRepository.iterator();
@@ -76,8 +76,7 @@ public class App {
         }
     }
     void modifyList() {
-        String[] modify = commend.split("=", 2);
-        int modifyIndex = Integer.parseInt(modify[1]) - 1;
+        int modifyIndex = findByIndex() -1;
         boolean check = false;
 
         Iterator<SayingList> iterator = sayingRepository.iterator();
@@ -105,6 +104,10 @@ public class App {
         if (!check) {
             System.out.printf("%d번 명언은 존재하지 않습니다.\n", modifyIndex+1);
         }
+    }
+    int findByIndex() {
+        String[] idx = commend.split("=", 2);
+        return Integer.parseInt(idx[1]);
     }
 }
 
